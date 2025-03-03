@@ -1,8 +1,11 @@
 import Constants from "expo-constants";
-import { ScrollView, StyleSheet, View } from "react-native";
-import Text from "./Text";
-import theme from "../theme";
+import { Pressable, ScrollView, StyleSheet, View } from "react-native";
 import { Link } from "react-router-native";
+import { useMe } from "../hooks/useMe";
+import theme from "../theme";
+import Text from "./Text";
+import { authStorage } from "../utils/authStorage";
+import { useApolloClient } from "@apollo/client";
 
 const styles = StyleSheet.create({
   container: {
@@ -18,6 +21,14 @@ const styles = StyleSheet.create({
 });
 
 const AppBar = () => {
+  const { data } = useMe();
+  const apolloClient = useApolloClient();
+  
+  const logout = async () => {
+    await authStorage.removeAccessToken();
+    apolloClient.resetStore();
+  };
+
   return (
     <View style={styles.container}>
       <ScrollView
@@ -33,9 +44,16 @@ const AppBar = () => {
         <Link to={"/"}>
           <Text style={styles.text}>Ropositories</Text>
         </Link>
-        <Link to={"/signIn"}>
-          <Text style={styles.text}>SignIn</Text>
-        </Link>
+        {!(data && data.me) && (
+          <Link to={"/signIn"}>
+            <Text style={styles.text}>SignIn</Text>
+          </Link>
+        )}
+        {data && data.me && (
+          <Pressable onPress={() => logout()}>
+            <Text style={styles.text}>Logout</Text>
+          </Pressable>
+        )}
       </ScrollView>
     </View>
   );

@@ -1,11 +1,14 @@
+import { useFormik } from "formik";
 import React from "react";
-import { View, StyleSheet } from "react-native";
-import TextInput from "./TextInput";
+import { StyleSheet, View } from "react-native";
+import * as yup from "yup";
+import { useSignIn } from "../hooks/useSignIn";
 import Button from "./Button";
 import Text from "./Text";
-import { useFormik } from "formik";
-import * as yup from "yup";
-import theme from "../theme";
+import TextInput from "./TextInput";
+import { useApolloClient } from "@apollo/client";
+import { useNavigate } from "react-router-native";
+import { authStorage } from "../utils/authStorage";
 
 const styles = StyleSheet.create({
   container: {
@@ -20,13 +23,28 @@ const validationSchema = yup.object().shape({
 });
 
 const SignIn = () => {
+  const [signIn] = useSignIn();
+  const navigate = useNavigate();
+  const apolloClient = useApolloClient();
+
   const form = useFormik({
     initialValues: {
       username: "",
       password: "",
     },
-    onSubmit: (values) => {
-      console.log(values);
+    onSubmit: async (values) => {
+      const { username, password } = values;
+      try {
+        const { data } = await signIn({
+          variables: { credentials: { username, password } },
+        });
+        const token = data.authenticate.accessToken;
+        authStorage.setAccessToken(token);
+        apolloClient.resetStore();
+        navigate("/");
+      } catch (error) {
+        console.log(error);
+      }
     },
     validationSchema,
   });

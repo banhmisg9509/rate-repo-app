@@ -9,33 +9,42 @@ import { FlatCompat } from "@eslint/eslintrc";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const compat = new FlatCompat({
-    baseDirectory: __dirname,
-    recommendedConfig: js.configs.recommended,
-    allConfig: js.configs.all
+  baseDirectory: __dirname,
+  recommendedConfig: js.configs.recommended,
+  allConfig: js.configs.all,
 });
 
-export default [...compat.extends("eslint:recommended", "plugin:react/recommended"), {
+export default [
+  ...compat.extends("eslint:recommended", "plugin:react/recommended"),
+  {
     plugins: {
-        react,
-        "react-native": reactNative,
+      react,
+      "react-native": reactNative,
     },
 
     languageOptions: {
-        globals: {
-            ...reactNative.environments["react-native"]["react-native"],
-        },
+      globals: {
+        ...reactNative.environments["react-native"]["react-native"],
+        fetch: true,
+        process: true,
+        console: true,
+      },
 
-        parser: babelParser,
+      parser: babelParser,
     },
 
     settings: {
-        react: {
-            version: "detect",
-        },
+      react: {
+        version: "detect",
+      },
     },
 
     rules: {
-        "react/prop-types": "off",
-        "react/react-in-jsx-scope": "off",
+      "react/prop-types": "off",
+      "react/react-in-jsx-scope": "off",
     },
-}];
+  },
+  {
+    ignores: ["metro.config.js"],
+  },
+];
