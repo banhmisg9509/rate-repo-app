@@ -7,6 +7,9 @@ const styles = StyleSheet.create({
     borderColor: theme.colors.textSecondary,
     borderWidth: 1,
     borderRadius: 4,
+    backgroundColor: theme.colors.white,
+    height: 45,
+    paddingHorizontal: 8,
   },
 });
 const TextInput = ({ error, ...props }) => {

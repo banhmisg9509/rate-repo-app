@@ -1,5 +1,3 @@
-import "dotenv/config";
-
 export default {
   name: "rate-repository-app",
   slug: "rate-repository-app",
@@ -22,6 +20,7 @@ export default {
       foregroundImage: "./assets/adaptive-icon.png",
       backgroundColor: "#ffffff",
     },
+    package: "com.banhmisg9509.raterepositoryapp",
   },
   web: {
     favicon: "./assets/favicon.png",
@@ -37,8 +36,4 @@ export default {
       },
     ],
   ],
-  extra: {
-    env: process.env.ENV,
-    APOLLO_URI: process.env.APOLLO_URI,
-  },
 };

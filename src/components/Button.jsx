@@ -5,25 +5,37 @@ import Text from "./Text";
 
 const styles = StyleSheet.create({
   button: {
-    backgroundColor: theme.colors.primary,
     borderRadius: 4,
     padding: 12,
     justifyContent: "center",
     alignItems: "center",
+  },
+  colorPrimary: {
+    backgroundColor: theme.colors.primary,
+  },
+  colorError: {
+    backgroundColor: theme.colors.error,
   },
   text: {
     color: theme.colors.white,
   },
 });
 
-const Button = ({ children, text, ...props }) => {
+const Button = ({ color = "primary", text, style, ...props }) => {
+  const buttonStyle = [
+    styles.button,
+    color === "primary" && styles.colorPrimary,
+    color === "error" && styles.colorError,
+    style,
+  ];
   return (
     <Pressable
-      style={styles.button}
-      {...props}
+      style={buttonStyle}
       android_ripple={{
-        color: theme.colors.active,
+        color:
+          color === "primary" ? theme.colors.active : theme.colors.activeError,
       }}
+      {...props}
     >
       <Text style={styles.text}>{text}</Text>
     </Pressable>

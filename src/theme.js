@@ -6,6 +6,7 @@ const theme = {
     white: "#ffffff",
     background: "#e1e4e8",
     active: "#0389d6",
+    activeError: '#de5b68',
     error: "#d73a4a",
   },
   fontSizes: {

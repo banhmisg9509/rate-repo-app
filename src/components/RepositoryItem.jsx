@@ -1,6 +1,8 @@
 import { Image, StyleSheet, View } from "react-native";
-import Text from "./Text";
 import theme from "../theme";
+import Button from "./Button";
+import Text from "./Text";
+import * as Linking from "expo-linking";
 
 const styles = StyleSheet.create({
   container: {
@@ -68,6 +70,12 @@ const RepositoryItem = ({ item }) => {
           <Text color="textSecondary">Rating</Text>
         </View>
       </View>
+      {item.url && (
+        <Button
+          text="Open in Github"
+          onPress={() => Linking.openURL(item.url)}
+        />
+      )}
     </View>
   );
 };

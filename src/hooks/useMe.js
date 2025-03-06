@@ -1,6 +1,9 @@
 import { useQuery } from "@apollo/client";
 import { GET_ME } from "../graphql/queries";
 
-export const useMe = () => {
-  return useQuery(GET_ME);
+export const useMe = (includeReviews = false) => {
+  return useQuery(GET_ME, {
+    variables: { includeReviews },
+    fetchPolicy: "cache-and-network",
+  });
 };

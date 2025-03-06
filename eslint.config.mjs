@@ -15,7 +15,11 @@ const compat = new FlatCompat({
 });
 
 export default [
-  ...compat.extends("eslint:recommended", "plugin:react/recommended"),
+  ...compat.extends(
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:jest/recommended"
+  ),
   {
     plugins: {
       react,
@@ -28,6 +32,8 @@ export default [
         fetch: true,
         process: true,
         console: true,
+        setTimeout: true,
+        clearTimeout: true,
       },
 
       parser: babelParser,

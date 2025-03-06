@@ -1,11 +1,10 @@
 import Constants from "expo-constants";
 import { Pressable, ScrollView, StyleSheet, View } from "react-native";
 import { Link } from "react-router-native";
-import { useMe } from "../hooks/useMe";
+import { useLoggedIn } from "../hooks/useLoggedIn";
+import { useLogout } from "../hooks/useLogout";
 import theme from "../theme";
 import Text from "./Text";
-import { authStorage } from "../utils/authStorage";
-import { useApolloClient } from "@apollo/client";
 
 const styles = StyleSheet.create({
   container: {
@@ -21,13 +20,8 @@ const styles = StyleSheet.create({
 });
 
 const AppBar = () => {
-  const { data } = useMe();
-  const apolloClient = useApolloClient();
-  
-  const logout = async () => {
-    await authStorage.removeAccessToken();
-    apolloClient.resetStore();
-  };
+  const { isLoggedIn } = useLoggedIn();
+  const { logout } = useLogout();
 
   return (
     <View style={styles.container}>
@@ -36,23 +30,38 @@ const AppBar = () => {
         contentContainerStyle={{
           flexDirection: "row",
           alignItems: "flex-start",
-          gap: 4,
+          gap: 8,
         }}
         snapToAlignment="start"
         pagingEnabled
       >
-        <Link to={"/"}>
+        <Link to="/">
           <Text style={styles.text}>Ropositories</Text>
         </Link>
-        {!(data && data.me) && (
-          <Link to={"/signIn"}>
-            <Text style={styles.text}>SignIn</Text>
+        {isLoggedIn && (
+          <Link to="/review">
+            <Text style={styles.text}>Create a review</Text>
           </Link>
         )}
-        {data && data.me && (
+        {isLoggedIn && (
+          <Link to="/myReview">
+            <Text style={styles.text}>My reviews</Text>
+          </Link>
+        )}
+        {!isLoggedIn && (
+          <Link to="/signIn">
+            <Text style={styles.text}>Sign in</Text>
+          </Link>
+        )}
+        {isLoggedIn && (
           <Pressable onPress={() => logout()}>
             <Text style={styles.text}>Logout</Text>
           </Pressable>
+        )}
+        {!isLoggedIn && (
+          <Link to="/signUp">
+            <Text style={styles.text}>Sign up</Text>
+          </Link>
         )}
       </ScrollView>
     </View>
